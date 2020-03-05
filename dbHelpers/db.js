@@ -1,11 +1,24 @@
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/sagittarius', {useNewUrlParser: true});
+require('dotenv').config();
 
+
+var password = process.env.MONGOKEY;
+
+var produri = 'mongodb+srv://alison:'+ password +'@cluster0-bw2fr.mongodb.net/sagittarius?retryWrites=true&w=majority';
+var devuri = 'mongodb://localhost/sagittarius';
+var uri = password === undefined ? devuri : produri;
+
+mongoose.connect(uri, {useNewUrlParser: true});
+// useUnifiedTopology: true
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
   console.log('connected to Sagittarius db (similar service)');
 });
+
+var rankSchema = new mongoose.Schema({
+  id: Number
+},{ _id : false });
 
 var breedSchema = new mongoose.Schema({
   id: Number,
@@ -17,7 +30,7 @@ var breedSchema = new mongoose.Schema({
   weightMin: Number,
   heightMax: Number,
   heightMin: Number,
-  ranks: [{id: Number}, {id: Number}, {id: Number}, {id: Number}, {id: Number}, {id: Number}, {id: Number}, {id: Number}, {id: Number}, {id: Number}]
+  ranks: [rankSchema]
 });
 
 var Breed = mongoose.model('Breed', breedSchema);
@@ -37,7 +50,7 @@ var get = function(id, callback) {
     if (err) {
       callback(err);
     } else {
-      callback(null, dog.url);
+      callback(null, dog);
     }
   })
 }

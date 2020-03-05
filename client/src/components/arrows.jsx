@@ -25,6 +25,7 @@ top: 0;
   position:absolute;
   z-index: 6;
   top: 50%;
+  cursor: pointer;
 }
 `;
 
