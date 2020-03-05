@@ -5,6 +5,8 @@ const styled = require('styled-components').default;
 const Dog = require('./components/dog.jsx').default;
 const DogMenu = require('./components/dogMenu.jsx').default;
 
+var url = window.location.hostname === 'localhost' ? 'http://localhost' : 'http://ec2-54-185-0-112.us-west-2.compute.amazonaws.com';
+
 
 
 const StyledHeader = styled.h3`
@@ -31,7 +33,7 @@ class Similar extends React.Component {
     var that = this;
     $.ajax({
       method:'GET',
-      url: 'http://localhost:3001/url/' + dogID
+      url: url + ':3001/url/' + dogID
     }).done(function(data){
       that.setState({
         list: data.ranks,

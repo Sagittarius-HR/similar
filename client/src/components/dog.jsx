@@ -3,10 +3,12 @@ import ReactDOM from 'react-dom';
 import $ from 'jquery';
 import styled from 'styled-components';
 
+var url = window.location.hostname === 'localhost' ? 'http://localhost' : 'http://ec2-54-185-0-112.us-west-2.compute.amazonaws.com';
+
 const StyledImage = styled.img`
   height: 260px;
   margin-right: 10px;
-  width: 560px;
+  max-width: 560px;
   object-fit: cover;
   border-radius: 10px 10px 0 0;
   float:left;
@@ -62,7 +64,7 @@ class Dog extends React.Component {
     var that = this;
     $.ajax({
       method:'GET',
-      url: 'http://localhost:3001/url/' + that.props.id
+      url: url + ':3001/url/' + that.props.id
     }).done(function(data){
       that.setState({
         url: data.url,
