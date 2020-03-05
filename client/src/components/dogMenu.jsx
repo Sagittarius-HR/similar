@@ -9,6 +9,7 @@ const StyledMenu = styled.div`
   clear:both;
   background-color: #efeef1;
   max-width: 1220px;
+  min-width: 650px;
   margin: 0 auto;
   padding-top: 20px;
   display: inline-block;
@@ -21,6 +22,49 @@ const DogContainer = styled.div`
   white-space: nowrap;
   display: inline-block;
   width: 100%;
+`;
+
+const NavDots = styled.div`
+  
+
+  /* Styling for actual dot*/
+  & > div {
+    width: 10px;
+    height: 10px;
+    margin: 0 8px;
+    background: '#333';
+    border-radius: 50%;
+    opacity: ${props => props.selected === true ? .25 : 1};
+    cursor: pointer;
+  }
+`;
+
+const NavDot = styled.div`
+  width: 10px;
+  height: 10px;
+  margin: 0 8px;
+  background: '#333';
+  border-radius: 50%;
+  opacity: ${props => props.selected === true ? .25 : 1};
+  cursor: pointer;
+
+/* Styling for actual arrow divs */
+& > div {
+  border-radius: 50px;
+  height: 44px;
+  width: 44px;
+  background: #FFF;
+  opacity: .7;
+  text-align:center;
+  line-height: 44px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 50px;
+  font-weight: 900;
+  position:absolute;
+  z-index: 6;
+  top: 50%;
+  cursor: pointer;
+}
 `;
 
 class DogMenu extends React.Component {

@@ -31,6 +31,7 @@ const StyledNameText = styled.h4`
   font-size: 24px;   
   margin:0;
   font-weight: 400;
+  cursor: pointer;
 `;
 
 const StyledImageDiv = styled.div`
@@ -52,6 +53,7 @@ class Dog extends React.Component {
     this.state = {url:'', name:''};
 
     this.setUrl = this.setUrl.bind(this);
+    this.loadUrl = this.loadUrl.bind(this);
 
     this.setUrl();
   }
@@ -63,17 +65,21 @@ class Dog extends React.Component {
       url: 'http://localhost:3001/url/' + that.props.id
     }).done(function(data){
       that.setState({
-        url: data,
-        name: 'Dog'
+        url: data.url,
+        name: data.name
       })
     })
+  }
+
+  loadUrl() {
+    location.href = '/' + this.props.id;
   }
 
   render() {
     return (
       <StyledImageDiv>
         <StyledImage src = {this.state.url}></StyledImage><StyledNameDiv>
-          <StyledNameText>
+          <StyledNameText onClick = {this.loadUrl}>
             {this.state.name}
           </StyledNameText>
         </StyledNameDiv>

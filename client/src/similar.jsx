@@ -4,20 +4,8 @@ const $ = require('jquery');
 const styled = require('styled-components').default;
 const Dog = require('./components/dog.jsx').default;
 const DogMenu = require('./components/dogMenu.jsx').default;
-// list of items
 
-const list = [
-  { id: '1' },
-  { id: '2' },
-  { id: '3' },
-  { id: '4' },
-  { id: '5' },
-  { id: '6' },
-  { id: '7' },
-  { id: '8' },
-  { id: '9' },
-  { id: '10' }
-];
+
 
 const StyledHeader = styled.h3`
   color: #6504b5;
@@ -30,26 +18,43 @@ const StyledHeader = styled.h3`
 class Similar extends React.Component {
   constructor(props) {
     super(props);
+
+    this.state = {id: 1, list:[], ready: false};
     // call it again if items count changes
   }
 
   componentDidMount() {
-    var dogID = Number.parseFloat(window.location.pathname);
+    var dogID = Number.parseFloat(window.location.pathname.replace(/^\/+|\/+$/g, ''));
     if (Number.isNaN(dogID)) {
-      return;
+      dogID = 1;
     }
+    var that = this;
+    $.ajax({
+      method:'GET',
+      url: 'http://localhost:3001/url/' + dogID
+    }).done(function(data){
+      that.setState({
+        list: data.ranks,
+        id: dogID,
+        ready: true
+      })
+    })
+  }
+
+  renderDogMenu() {
+    return (
+      <DogMenu id = {this.state.id} list = {this.state.list}
+        />
+    )
   }
   
   render() {
-
-    const menu = this.menuItems;
-
     return (
       <div className = 'App'>
         <StyledHeader>Similar Breeds</StyledHeader>
-        <DogMenu
-          list = {list}
-        />
+        <div>
+         {this.state.ready ? this.renderDogMenu() : "Loading.."}
+        </div>
       </div>
     )
   }
