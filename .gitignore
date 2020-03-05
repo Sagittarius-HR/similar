@@ -1,5 +1,6 @@
 node_modules
 dogpictures
+dogpictures_small
 deployment
 
 .env
