@@ -7,8 +7,7 @@ var url = window.location.hostname === 'localhost' ? 'http://localhost' : 'http:
 
 const StyledImage = styled.img`
   height: 260px;
-  margin-right: 10px;
-  max-width: 560px;
+  width: 100%;
   object-fit: cover;
   border-radius: 10px 10px 0 0;
   float:left;
@@ -16,10 +15,9 @@ const StyledImage = styled.img`
   z-index: 4;
 `;
 const StyledNameDiv = styled.div`
-  margin-right: 10px;
   height: 33px;
-  width: 480px;
   border-radius: 0 0 10px 10px;
+  width: calc(100% - 80px);
   background-color: #FFF; 
   padding: 15px 40px;
   float: left;
@@ -38,6 +36,8 @@ const StyledNameText = styled.h4`
 
 const StyledImageDiv = styled.div`
   display: inline-block;
+  width: calc(47% - 15px);
+  margin-right: 10px;
   &:hover {
     ${StyledImage} {
       opacity: .5;
@@ -46,6 +46,9 @@ const StyledImageDiv = styled.div`
       text-decoration: underline;
     }
   }
+`;
+const StyledImageWrapper = styled.div`
+  width: 100%;
 `;
 
 
@@ -80,11 +83,14 @@ class Dog extends React.Component {
   render() {
     return (
       <StyledImageDiv>
-        <StyledImage src = {this.state.url}></StyledImage><StyledNameDiv>
-          <StyledNameText onClick = {this.loadUrl}>
-            {this.state.name}
-          </StyledNameText>
-        </StyledNameDiv>
+        <StyledImageWrapper>
+          <StyledImage src = {this.state.url}></StyledImage>
+          <StyledNameDiv>
+            <StyledNameText onClick = {this.loadUrl}>
+              {this.state.name}
+            </StyledNameText>
+          </StyledNameDiv>
+        </StyledImageWrapper>
       </StyledImageDiv>
     )
   }
