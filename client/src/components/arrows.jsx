@@ -41,7 +41,7 @@ class MenuArrow extends React.Component {
   render() {
     return (
       <ArrowContainer direction = {this.props.direction}>
-        <Arrow>{this.props.direction === 'left' ? '<' : '>'}</Arrow>
+        <Arrow onClick = {(e) => this.props.scrollOnMenu(this.props.direction)}>{this.props.direction === 'left' ? '<' : '>'}</Arrow>
       </ArrowContainer>
     )
   }

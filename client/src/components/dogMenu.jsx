@@ -4,6 +4,7 @@ import $ from 'jquery';
 import styled from 'styled-components';
 import Dog from './dog.jsx';
 import MenuArrow from './arrows.jsx';
+import NavDot from './navdot.jsx';
 
 const StyledMenu = styled.div`
   clear:both;
@@ -17,7 +18,7 @@ const StyledMenu = styled.div`
 `;
 
 const DogContainer = styled.div`
-  overflow-x: scroll;
+  overflow-x: hidden;
   overflow-y: hidden;
   white-space: nowrap;
   display: inline-block;
@@ -25,65 +26,60 @@ const DogContainer = styled.div`
 `;
 
 const NavDots = styled.div`
-  
-
-  /* Styling for actual dot*/
-  & > div {
-    width: 10px;
-    height: 10px;
-    margin: 0 8px;
-    background: '#333';
-    border-radius: 50%;
-    opacity: ${props => props.selected === true ? .25 : 1};
-    cursor: pointer;
-  }
-`;
-
-const NavDot = styled.div`
-  width: 10px;
-  height: 10px;
-  margin: 0 8px;
-  background: '#333';
-  border-radius: 50%;
-  opacity: ${props => props.selected === true ? .25 : 1};
-  cursor: pointer;
-
-/* Styling for actual arrow divs */
-& > div {
-  border-radius: 50px;
-  height: 44px;
-  width: 44px;
-  background: #FFF;
-  opacity: .7;
-  text-align:center;
-  line-height: 44px;
-  font-family: 'Poppins', sans-serif;
-  font-size: 50px;
-  font-weight: 900;
-  position:absolute;
-  z-index: 6;
-  top: 50%;
-  cursor: pointer;
-}
+  clear: both;
+  margin: auto;
+  display: flex;
+  justify-content: center;
 `;
 
 class DogMenu extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {current: 0};
+
+    this.scrollOnMenu = this.scrollOnMenu.bind(this);
+    this.clickOnDot = this.clickOnDot.bind(this);
   }
   
+  scrollOnMenu (direction) {
+    var scrollNumber = direction === 'left' ? -1 : 1;
+    var newCurrent = (this.state.current + scrollNumber) % this.props.list.length;
+    newCurrent = newCurrent < 0 ? this.props.list.length + newCurrent : newCurrent;
+    this.setState({current: newCurrent});
+  }
+
+  clickOnDot(index) {
+    this.setState({current: index});
+  }
+
   render() {
-    var mappedItems = this.props.list.map(el => {
-      const {id} = el;
+    var mappedItems = this.props.list.filter((item, i) => {
+      return (i >= this.state.current && i <= this.state.current + 2) ;
+    });
+    var mappedOverflow = this.props.list.filter((item, i) => {
+      return (this.state.current + 2 >= this.props.list.length && i <= (this.state.current + 2) % this.props.list.length) ;
+    });
+    mappedItems = mappedItems.concat(mappedOverflow);
+    mappedItems = mappedItems.map(el => {
+      var id = el.id;
       return <Dog id={id} key={id} />;
     });
+
+    var dotsArray = [];
+    for (var i = 0; i < this.props.list.length; i++) {
+      dotsArray.push(<NavDot selected = {i === this.state.current} key = {i} index = {i} dotClick = {this.clickOnDot}></NavDot>);
+    }
+
     return (
       <StyledMenu>
-        <MenuArrow direction = "left"/>
+        <MenuArrow direction = "left" scrollOnMenu = {this.scrollOnMenu}/>
         <DogContainer>
           {mappedItems}
         </DogContainer>
-        <MenuArrow direction = "right"/>
+        <MenuArrow direction = "right" scrollOnMenu = {this.scrollOnMenu}/>
+        <NavDots>
+          {dotsArray}
+        </NavDots>
       </StyledMenu>
     )
   }
